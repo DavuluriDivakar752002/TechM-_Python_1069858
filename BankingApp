@@ -1,0 +1,206 @@
+import sys
+
+class BankSystem:
+
+    def __init__(self):
+
+        self.accounts={}
+
+        self.transaction={}
+
+    def create_account(self):
+
+        mobile_number=int(input("Enter Mobile number : "))
+
+        name=input("Enter your Name : ")
+
+        DOB=input("Enter your Date of Birth as DDMMYYYY : ")
+
+        balance=float(input("Enter your amount that you are depositing : "))
+
+        Accno=str(mobile_number)+DOB
+
+        if Accno in self.accounts:
+
+            print("Your number is already existed with another account.Use with other details!")
+
+        else:
+
+            self.accounts[Accno]=[name,mobile_number,DOB,balance]
+
+            print("Your account is Successfully created...")
+
+            print(f"Your Account number is {Accno}.Please remind it for future purpose.")
+
+            self.transaction[Accno]=[]
+
+    def view_account(self):
+
+        Accno=input("Enter your Account Number:")
+
+        account=self.accounts.get(Accno)
+
+        if account:
+
+            print(f"\nAccount Details\nName: {account[0]}\nMobile Number: {account[1]}\nDOB: {account[2]}\nBalance: {account[3]}")
+
+        else:
+
+            print("Invalid account details...")
+
+    def deposit(self):
+
+        Accno=input("Enter your Account Number:")
+
+        account=self.accounts.get(Accno)
+
+        if account:
+
+            amount=float(input("Enter amount : "))
+
+            self.transaction[Accno].append(["Deposit",account[3],account[3]+amount])
+
+            self.accounts[Accno][3]+=amount
+
+            print(f"Your balance is : {self.accounts[Accno][3]}")
+
+        else:
+
+            print("Enter valid account number...")
+    def withdraw(self):
+
+        Accno=input("Enter your Account Number:")
+
+        account=self.accounts.get(Accno)
+
+        if account:
+
+            amount=float(input("Enter amount : "))
+
+            if account[3]>=amount:
+
+                self.transaction[Accno].append(["Withdraw",account[3],account[3]-amount])
+
+                self.accounts[Accno][3]-=amount
+
+                print(f"Your balance is : {self.accounts[Accno][3]}")
+
+            else:
+
+                print("Insufficient Funds...")
+
+        else:
+
+            print("Enter valid account number...")
+
+    def fund_transfer(self):
+
+        sender_accno=input("Enter your Account Number:")
+
+        saccount=self.accounts.get(sender_accno)
+
+        if saccount:
+
+            reciever_accno=input("Enter Reciever's Account Number:")
+
+            raccount=self.accounts.get(reciever_accno)
+
+            if raccount:
+
+                amount=float(input("Enter amount : "))
+
+                if saccount[3]>=amount:
+
+                    self.transaction[sender_accno].append(["Transfered",saccount[3],saccount[3]-amount])
+
+                    self.accounts[sender_accno][3]-=amount
+
+                    print(f"Your balance is : {self.accounts[sender_accno][3]}")
+
+                    self.transaction[reciever_accno].append(["Recieved",raccount[3],raccount[3]-amount])
+
+                    self.accounts[reciever_accno][3]+=amount
+
+                    print(f"Your balance is : {self.accounts[reciever_accno][3]}")
+
+                else:
+
+                    print("Insufficient Funds...")
+
+            else:
+
+                print("Enter valid account number...")
+
+        else:
+
+            print("Enter valid account number...")
+
+    def print_transaction(self):
+
+        Accno=input(("Enter your Account Number : "))
+
+        if len(self.transaction[Accno])>=1:
+
+            for i in self.transaction[Accno]:
+
+                for j in i:
+
+                    print(j,end='|')
+
+                print()
+
+        else:
+
+            print("There are no transactions")
+
+   
+
+    def exit_system(self):
+
+        print("Existing system...")
+
+        sys.exit()
+
+   
+
+B=BankSystem()
+
+while True:
+
+    print("---BANKING APP---\n1.Create an Account\n2.View Account\n3.Withdraw\n4.Deposit\n5.Fund Transfer")
+
+    print("6.Print Transactions\n7.Exit")
+
+    choice=int(input("Enter your choice : "))
+
+    if choice==1:
+
+        B.create_account()
+
+    elif choice==2:
+
+        B.view_account()
+
+    elif choice==3:
+
+        B.withdraw()
+
+    elif choice==4:
+
+        B.deposit()
+
+    elif choice==5:
+
+        B.fund_transfer()
+
+    elif choice==6:
+
+        B.print_transaction()
+
+    elif choice==7:
+
+        B.exit_system()
+
+    else:
+
+        print("Enter a valid choice...")
